@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export const FETCHING_SMURFS = 'FETCHING_SMURFS';
 export const ADDING_SMURF = 'ADDING_SMURF';
+export const DELETING_SMURF = 'DELETING_SMURF';
 export const SUCCESS = 'SUCCESS';
 export const FAILURE = 'FAILURE';
 
@@ -43,8 +44,8 @@ export const fetchSmurfs = () => dispatch => {
   });
 }
 export const addSmurf = smurf => dispatch => {
-  const add = { type: ADDING_SMURF };
-  dispatch(add);
+  const addSmurf = { type: ADDING_SMURF };
+  dispatch(addSmurf);
   axios.post('http://localhost:3333/smurfs', smurf)
   .then(res => {
     const addSuccess = {
@@ -55,6 +56,26 @@ export const addSmurf = smurf => dispatch => {
   })
   .catch(err => {
     // console.log('error in fetching the data :(');
+    const failure = {
+      type: FAILURE,
+      payload: err
+    }
+    dispatch(failure);
+  });
+}
+export const deleteSmurf = smurfId => dispatch => {
+  const deleteSmurf = { type: DELETING_SMURF };
+  dispatch(deleteSmurf);
+  axios.delete(`http://localhost:3333/smurfs/${smurfId}`)
+  .then(res => {
+    const deleteSuccess = {
+      type: SUCCESS,
+      payload: res.data
+    };
+    dispatch(deleteSuccess);
+  })
+  .catch(err => {
+    console.log('error in fetching the data :(', err);
     const failure = {
       type: FAILURE,
       payload: err

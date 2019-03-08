@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { fetchSmurfs, addSmurf } from '../actions';
+import { fetchSmurfs, addSmurf, deleteSmurf } from '../actions';
 import SmurfForm from './SmurfForm';
 
 /*
@@ -17,11 +17,17 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props.smurfs);
     return (
       <div className="App">
         <h1>SMURFS! 2.0 W/ Redux</h1>
         <SmurfForm addSmurf={this.props.addSmurf} />
-        {this.props.smurfs.map(s => <p>{s.name} is {s.age} years old and {s.height} tall</p> )}
+        {this.props.smurfs.map(s =>
+          <div className="smurfContainer">
+            <p>{s.name} is {s.age} years old and {s.height} tall</p>
+            <button onClick={() => this.props.deleteSmurf(s.id)}>Delete smurf</button>
+          </div>
+        )}
       </div>
     );
   }
@@ -38,4 +44,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { fetchSmurfs, addSmurf })(App);
+export default connect(mapStateToProps, { fetchSmurfs, addSmurf, deleteSmurf })(App);
