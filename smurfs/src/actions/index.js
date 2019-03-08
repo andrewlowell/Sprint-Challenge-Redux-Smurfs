@@ -1,7 +1,13 @@
+import axios from 'axios';
 /* 
   Action Types Go Here!
   Be sure to export each action type so you can pull it into your reducer
 */
+
+export const FETCHING_SMURFS = 'FETCHING_SMURFS';
+export const ADDING_SMURF = 'ADDING_SMURF';
+export const SUCCESS = 'SUCCESS';
+export const FAILURE = 'FAILURE';
 
 /*
   For this project you'll need at least 2 action creators for the main portion,
@@ -13,3 +19,46 @@
    U - updateSmurf
    D - deleteSmurf
 */
+
+export const fetchSmurfs = () => dispatch => {
+  // console.log('fetching people data');
+  const fetch = { type: FETCHING_SMURFS };
+  dispatch(fetch);
+  axios.get('http://localhost:3333/smurfs/')
+  .then(res => {
+    // console.log('successfully got some people data!');
+    const fetchSuccess = {
+      type: SUCCESS,
+      payload: res.data
+    };
+    dispatch(fetchSuccess);
+  })
+  .catch(err => {
+    // console.log('error in fetching the data :(');
+    const failure = {
+      type: FAILURE,
+      payload: err
+    }
+    dispatch(failure);
+  });
+}
+export const addSmurf = smurf => dispatch => {
+  const add = { type: ADDING_SMURF };
+  dispatch(add);
+  axios.post('http://localhost:3333/smurfs', smurf)
+  .then(res => {
+    const addSuccess = {
+      type: SUCCESS,
+      payload: res.data
+    };
+    dispatch(addSuccess);
+  })
+  .catch(err => {
+    // console.log('error in fetching the data :(');
+    const failure = {
+      type: FAILURE,
+      payload: err
+    }
+    dispatch(failure);
+  });
+}
